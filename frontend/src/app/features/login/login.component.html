@@ -9,13 +9,13 @@
 
     <!-- ── Logo / Branding ── -->
     <header class="login-header">
-      <div class="logo-icon" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 6v6l4 2"/>
-        </svg>
-      </div>
+      <img
+        src="assets/logoLima.png"
+        alt="Control de Gastos Logo"
+        class="logo-img"
+        (error)="logoFallback($event)"
+        #logoEl
+      />
       <h1 class="brand-name">Control de Gastos</h1>
       <p class="brand-tagline">Administra tus finanzas de manera inteligente</p>
     </header>

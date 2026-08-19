@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserProfile } from '../../core/models/auth.models';
 
@@ -19,6 +20,7 @@ import { UserProfile } from '../../core/models/auth.models';
 export class LoginComponent {
   private readonly fb      = inject(FormBuilder);
   private readonly authSvc = inject(AuthService);
+  private readonly router  = inject(Router);
 
   // ─── Estado ─────────────────────────────────────────────────
   readonly isLoading    = signal(false);
@@ -52,6 +54,28 @@ export class LoginComponent {
     return null;
   }
 
+  // ─── Manejo de logo ─────────────────────────────────────────
+  /** Reemplaza logo imagen con SVG cuando el PNG no carga */
+  logoFallback(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    // Ocultar la imagen rota y mostrar el contenedor de fallback
+    img.style.display = 'none';
+    const parent = img.parentElement;
+    if (parent) {
+      const svgDiv = document.createElement('div');
+      svgDiv.className = 'logo-icon';
+      svgDiv.setAttribute('aria-hidden', 'true');
+      svgDiv.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+      `;
+      parent.insertBefore(svgDiv, img);
+    }
+  }
+
   // ─── Acciones ───────────────────────────────────────────────
   togglePassword(): void {
     this.showPassword.update((v) => !v);
@@ -75,6 +99,8 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading.set(false);
         this.loggedUser.set(response.data.user);
+        // Redirigir al dashboard tras login exitoso
+        this.router.navigate(['/dashboard']);
       },
       error: (err: Error) => {
         this.isLoading.set(false);

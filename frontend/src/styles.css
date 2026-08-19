@@ -1,17 +1,146 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
 
-/* Global reset & base */
+/* ======================================================
+   Control de Gastos — Global Design System
+   Dark · Glassmorphism · Futuristic
+   ====================================================== */
+
+/* ── Variables globales CSS ─────────────────────────── */
+:root {
+  /* Paleta de color */
+  --clr-bg-900:       #080617;
+  --clr-bg-800:       #0f0c29;
+  --clr-bg-700:       #161033;
+  --clr-bg-600:       #1e1640;
+  --clr-bg-500:       #24243e;
+
+  /* Acento principal (violeta) */
+  --clr-accent-600:   #5b21b6;
+  --clr-accent-500:   #7c3aed;
+  --clr-accent-400:   #8b5cf6;
+  --clr-accent-300:   #a78bfa;
+  --clr-accent-glow:  rgba(124, 58, 237, 0.35);
+
+  /* Acento secundario (cyan) */
+  --clr-cyan-500:     #06b6d4;
+  --clr-cyan-glow:    rgba(6, 182, 212, 0.25);
+
+  /* Semánticos */
+  --clr-success:      #10b981;
+  --clr-warning:      #f59e0b;
+  --clr-error:        #f87171;
+  --clr-error-bg:     rgba(248, 113, 113, 0.10);
+
+  /* Glass */
+  --clr-glass-bg:     rgba(255, 255, 255, 0.05);
+  --clr-glass-bg-md:  rgba(255, 255, 255, 0.08);
+  --clr-glass-border: rgba(255, 255, 255, 0.10);
+  --clr-glass-border-md: rgba(255, 255, 255, 0.16);
+
+  /* Texto */
+  --clr-text-100:     #f8fafc;
+  --clr-text-200:     #f1f5f9;
+  --clr-text-400:     #94a3b8;
+  --clr-text-600:     #64748b;
+
+  /* Radios */
+  --radius-xs:  4px;
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+  --radius-xl:  24px;
+  --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm:   0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-md:   0 8px 32px rgba(0, 0, 0, 0.45);
+  --shadow-lg:   0 20px 60px rgba(0, 0, 0, 0.55);
+  --shadow-glow-accent: 0 0 40px var(--clr-accent-glow);
+  --shadow-glow-cyan:   0 0 30px var(--clr-cyan-glow);
+
+  /* Transiciones */
+  --transition-fast:   0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:   0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   0.4s  cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.5s  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Tipografía */
+  --font-base: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Reset global ───────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html {
   height: 100%;
-  font-family: 'Inter', system-ui, sans-serif;
-  background: #0f0c29;
-  color: #f1f5f9;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  font-family: var(--font-base);
+  background: linear-gradient(150deg,
+    var(--clr-bg-900) 0%,
+    var(--clr-bg-800) 40%,
+    var(--clr-bg-700) 70%,
+    var(--clr-bg-500) 100%
+  );
+  background-attachment: fixed;
+  color: var(--clr-text-200);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* ── Scrollbar personalizado ────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--clr-bg-800); }
+::-webkit-scrollbar-thumb {
+  background: var(--clr-accent-600);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--clr-accent-500); }
+
+/* ── Utilidades de animación globales ───────────────── */
+@keyframes global-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes global-slide-in {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes global-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes global-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+.animate-fade-in  { animation: global-fade-in  var(--transition-slow) both; }
+.animate-slide-in { animation: global-slide-in var(--transition-slow) both; }
+.animate-spin     { animation: global-spin 0.8s linear infinite; }
+.animate-pulse    { animation: global-pulse 2s ease-in-out infinite; }
+
+/* ── Clases utilitarias de glass ────────────────────── */
+.glass {
+  background: var(--clr-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--clr-glass-border);
+}
+
+.glass-md {
+  background: var(--clr-glass-bg-md);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--clr-glass-border-md);
 }
