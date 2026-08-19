@@ -1,0 +1,141 @@
+/* ======================================================
+   Under Construction Component — Futuristic Tech Style
+   ====================================================== */
+
+.construction-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  padding: 2rem;
+}
+
+/* Tarjeta */
+.construction-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 22px;
+  padding: 3rem 2.5rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: card-appear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea de acento superior */
+.construction-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #7c3aed, #06b6d4, transparent);
+  opacity: 0.6;
+}
+
+@keyframes card-appear {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Contenedor de engranajes */
+.construction-icon {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin-bottom: 0.5rem;
+}
+
+/* Engranaje principal */
+.gear-main {
+  width: 70px;
+  height: 70px;
+  color: #7c3aed;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: spin-cw 5s linear infinite;
+  filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.5));
+}
+
+/* Engranaje pequeño */
+.gear-small {
+  width: 38px;
+  height: 38px;
+  color: #06b6d4;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  animation: spin-ccw 3.5s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.45));
+}
+
+@keyframes spin-cw  { to { transform: rotate(360deg); } }
+@keyframes spin-ccw { to { transform: rotate(-360deg); } }
+
+/* Título */
+.construction-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #f1f5f9, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+/* Mensaje */
+.construction-message {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.65;
+  max-width: 340px;
+}
+
+/* Barra de progreso decorativa */
+.progress-bar {
+  width: 100%;
+  max-width: 280px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(90deg, #7c3aed, #06b6d4, #a78bfa);
+  background-size: 200% 100%;
+  border-radius: 999px;
+  animation: progress-shine 2.5s linear infinite;
+}
+
+@keyframes progress-shine {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hint */
+.construction-hint {
+  font-size: 0.8rem;
+  color: rgba(148, 163, 184, 0.5);
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

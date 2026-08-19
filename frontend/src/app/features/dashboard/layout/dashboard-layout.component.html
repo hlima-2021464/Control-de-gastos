@@ -1,0 +1,132 @@
+<div class="dashboard-shell" [class.sidebar-open]="sidebarOpen()">
+
+  <!-- ── Overlay para cerrar sidebar en móvil ──────────── -->
+  @if (sidebarOpen()) {
+    <div class="sidebar-overlay" (click)="closeSidebar()" aria-hidden="true"></div>
+  }
+
+  <!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+  <aside class="sidebar" role="navigation" aria-label="Navegación principal">
+
+    <!-- Logo -->
+    <div class="sidebar-brand">
+      @if (!logoError()) {
+        <img
+          src="assets/logoLima.png"
+          alt="Logo Control de Gastos"
+          class="sidebar-logo"
+          (error)="onLogoError()"
+        />
+      } @else {
+        <div class="sidebar-logo-fallback" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+      }
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">Control</span>
+        <span class="sidebar-brand-sub">de Gastos</span>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="sidebar-nav">
+      @for (item of navItems; track item.id) {
+        <a
+          [id]="item.id"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+          class="sidebar-link"
+          (click)="closeSidebar()"
+          [attr.aria-label]="item.label">
+          <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path [attr.d]="item.icon"/>
+          </svg>
+          <span class="sidebar-label">{{ item.label }}</span>
+          <span class="sidebar-link-glow" aria-hidden="true"></span>
+        </a>
+      }
+    </nav>
+
+    <!-- User info en sidebar -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">{{ userInitial }}</div>
+        <div class="sidebar-user-info">
+          <p class="sidebar-username">{{ currentUser()?.username }}</p>
+          <span class="sidebar-role" [class.role-admin]="currentUser()?.role === 'ADMIN'">
+            {{ currentUser()?.role ?? 'USER' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ══ ÁREA PRINCIPAL ══════════════════════════════════ -->
+  <div class="main-area">
+
+    <!-- ── Navbar superior ─────────────────────────────── -->
+    <header class="navbar" role="banner">
+
+      <!-- Hamburger (móvil) -->
+      <button
+        id="btn-toggle-sidebar"
+        class="nav-hamburger"
+        type="button"
+        (click)="toggleSidebar()"
+        [attr.aria-expanded]="sidebarOpen()"
+        aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Título de la página -->
+      <div class="nav-brand-mobile">
+        <span class="nav-brand-text">Control de Gastos</span>
+      </div>
+
+      <!-- Acciones del navbar -->
+      <div class="nav-actions">
+        <!-- Avatar + nombre usuario -->
+        <div class="nav-user">
+          <div class="nav-avatar" aria-hidden="true">{{ userInitial }}</div>
+          <div class="nav-user-info">
+            <p class="nav-username">{{ currentUser()?.username }}</p>
+            <span class="nav-role" [class.role-admin]="currentUser()?.role === 'ADMIN'">
+              {{ currentUser()?.role ?? 'USER' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Botón Logout -->
+        <button
+          id="btn-dashboard-logout"
+          class="nav-logout"
+          type="button"
+          (click)="logout()"
+          aria-label="Cerrar sesión">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span class="nav-logout-text">Salir</span>
+        </button>
+      </div>
+
+    </header>
+
+    <!-- ── Contenido de las rutas hijas ────────────────── -->
+    <main class="page-content" role="main">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>
