@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { env } from './config/env';
 import authRoutes from './modules/auth/routes/auth.routes';
+import usersRoutes from './modules/users/routes/users.routes';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ─── Rutas ──────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRoutes);
 
 app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({
