@@ -9,8 +9,8 @@ import {
   UserProfile,
 } from '../models/auth.models';
 
-const TOKEN_KEY   = 'auth_token';
-const USER_KEY    = 'auth_user';
+const TOKEN_KEY = 'auth_token';
+const USER_KEY  = 'auth_user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -18,6 +18,9 @@ export class AuthService {
 
   // Signal reactivo con el perfil de usuario actual
   readonly currentUser = signal<UserProfile | null>(this.loadUser());
+
+  // Signal para controlar el modal de sesión expirada
+  readonly sessionExpired = signal<boolean>(false);
 
   constructor(private readonly http: HttpClient) {}
 
@@ -38,6 +41,18 @@ export class AuthService {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     this.currentUser.set(null);
+  }
+
+  // ─── Sesión expirada ─────────────────────────────────────────
+  /** Activa el modal de sesión expirada (llamado desde el interceptor) */
+  triggerSessionExpired(): void {
+    this.logout();
+    this.sessionExpired.set(true);
+  }
+
+  /** Limpia el estado de sesión expirada (llamado al cerrar el modal) */
+  clearSessionExpired(): void {
+    this.sessionExpired.set(false);
   }
 
   // ─── Helpers ────────────────────────────────────────────────

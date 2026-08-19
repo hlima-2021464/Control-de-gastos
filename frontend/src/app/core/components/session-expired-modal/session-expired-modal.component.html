@@ -1,0 +1,32 @@
+<div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+
+    <!-- Ícono de advertencia animado -->
+    <div class="modal-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+
+    <!-- Título -->
+    <h2 id="modal-title" class="modal-title">Sesión Expirada</h2>
+
+    <!-- Mensaje exacto requerido -->
+    <p class="modal-message">
+      su sesion haexpirado, por favor vuelva a iniciar sesión
+    </p>
+
+    <!-- Botón de aceptar -->
+    <button
+      id="btn-session-expired-accept"
+      class="modal-btn"
+      type="button"
+      (click)="onAccept()"
+      autofocus>
+      Aceptar
+    </button>
+
+  </div>
+</div>

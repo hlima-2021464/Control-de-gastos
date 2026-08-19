@@ -1,13 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './core/services/auth.service';
+import { SessionExpiredModalComponent } from './core/components/session-expired-modal/session-expired-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  template: `<router-outlet />`,
+  imports: [RouterOutlet, CommonModule, SessionExpiredModalComponent],
+  template: `
+    <router-outlet />
+    @if (authService.sessionExpired()) {
+      <app-session-expired-modal />
+    }
+  `,
   styles: [`
     :host { display: block; }
   `],
 })
-export class App {}
+export class App {
+  readonly authService = inject(AuthService);
+}
