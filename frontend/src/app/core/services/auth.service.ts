@@ -12,17 +12,41 @@ import {
 const TOKEN_KEY = 'auth_token';
 const USER_KEY  = 'auth_user';
 
+/** Decodifica el payload de un JWT sin verificar la firma (solo lectura de exp). */
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    // Base64url → base64 → JSON
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const json   = atob(base64);
+    return JSON.parse(json) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
 
-  // Signal reactivo con el perfil de usuario actual
+  // ─── Signals reactivos ──────────────────────────────────────
+  /** Perfil del usuario autenticado actual */
   readonly currentUser = signal<UserProfile | null>(this.loadUser());
 
-  // Signal para controlar el modal de sesión expirada
+  /** Controla la visibilidad del modal de sesión expirada */
   readonly sessionExpired = signal<boolean>(false);
 
-  constructor(private readonly http: HttpClient) {}
+  // ─── Timer de expiración ────────────────────────────────────
+  private expirationTimer: ReturnType<typeof setTimeout> | null = null;
+
+  constructor(private readonly http: HttpClient) {
+    // Al iniciar la app (recarga de página), retomar el watcher si ya hay sesión
+    const token = this.getToken();
+    if (token) {
+      this.startExpirationWatcher(token);
+    }
+  }
 
   // ─── Login ──────────────────────────────────────────────────
   login(credentials: LoginRequest): Observable<AuthSuccessResponse> {
@@ -38,21 +62,69 @@ export class AuthService {
 
   // ─── Logout ─────────────────────────────────────────────────
   logout(): void {
+    this.clearExpirationWatcher();
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     this.currentUser.set(null);
   }
 
   // ─── Sesión expirada ─────────────────────────────────────────
-  /** Activa el modal de sesión expirada (llamado desde el interceptor) */
+  /**
+   * Activa el modal de sesión expirada.
+   * Llamado tanto desde el interceptor HTTP (401) como desde el timer proactivo.
+   */
   triggerSessionExpired(): void {
+    // Evitar doble disparo si el modal ya está visible
+    if (this.sessionExpired()) return;
     this.logout();
     this.sessionExpired.set(true);
   }
 
-  /** Limpia el estado de sesión expirada (llamado al cerrar el modal) */
+  /** Cierra el modal de sesión expirada */
   clearSessionExpired(): void {
     this.sessionExpired.set(false);
+  }
+
+  // ─── Token Watcher proactivo ─────────────────────────────────
+  /**
+   * Decodifica el campo `exp` del JWT y programa un setTimeout para activar
+   * el modal exactamente cuando el token expire, sin necesidad de peticiones HTTP.
+   */
+  startExpirationWatcher(token: string): void {
+    this.clearExpirationWatcher(); // Cancelar cualquier timer anterior
+
+    const payload = decodeJwtPayload(token);
+    if (!payload || typeof payload['exp'] !== 'number') {
+      console.warn('[AuthService] No se pudo leer exp del JWT. Watcher no iniciado.');
+      return;
+    }
+
+    const expMs      = (payload['exp'] as number) * 1000; // exp está en segundos
+    const nowMs      = Date.now();
+    const remainingMs = expMs - nowMs;
+
+    if (remainingMs <= 0) {
+      // Token ya expirado al cargar
+      this.triggerSessionExpired();
+      return;
+    }
+
+    console.info(
+      `[AuthService] Token expira en ${Math.round(remainingMs / 1000)}s. Watcher activado.`
+    );
+
+    this.expirationTimer = setTimeout(() => {
+      console.info('[AuthService] Token expirado por timer. Mostrando modal.');
+      this.triggerSessionExpired();
+    }, remainingMs);
+  }
+
+  /** Cancela el timer de expiración en curso */
+  private clearExpirationWatcher(): void {
+    if (this.expirationTimer !== null) {
+      clearTimeout(this.expirationTimer);
+      this.expirationTimer = null;
+    }
   }
 
   // ─── Helpers ────────────────────────────────────────────────
@@ -69,6 +141,8 @@ export class AuthService {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
     this.currentUser.set(user);
+    // Iniciar el watcher proactivo con el nuevo token
+    this.startExpirationWatcher(token);
   }
 
   private loadUser(): UserProfile | null {

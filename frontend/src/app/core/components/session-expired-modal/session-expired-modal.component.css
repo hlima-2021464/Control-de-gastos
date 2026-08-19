@@ -1,8 +1,9 @@
 /* ======================================================
-   Session Expired Modal — Glassmorphism Premium
+   Session Expired Modal — Neon Glassmorphism v2
+   Purple · Blue · Deep Dark · Animated
    ====================================================== */
 
-/* Overlay oscuro con blur */
+/* ── Overlay ─────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -10,11 +11,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: overlay-in 0.3s ease both;
   padding: 1rem;
+  /* Fondo oscuro con tinte púrpura */
+  background: rgba(5, 3, 18, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: overlay-in 0.35s ease both;
 }
 
 @keyframes overlay-in {
@@ -22,96 +24,183 @@
   to   { opacity: 1; }
 }
 
-/* Tarjeta modal */
+/* ── Tarjeta modal ───────────────────────────────────── */
 .modal-card {
-  background: rgba(15, 12, 41, 0.88);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(248, 113, 113, 0.25);
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  max-width: 380px;
+  /* Fondo glass oscuro */
+  background: rgba(10, 7, 28, 0.92);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+
+  /* Borde neon purple/blue */
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 22px;
+  padding: 2.75rem 2.25rem 2.25rem;
+  max-width: 400px;
   width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.35rem;
+  position: relative;
+  overflow: hidden;
+
+  /* Sombra neon */
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.6),
-    0 0 50px rgba(248, 113, 113, 0.12);
-  animation: card-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    0 30px 70px rgba(0, 0, 0, 0.7),
+    0 0 60px rgba(124, 58, 237, 0.18),
+    0 0 120px rgba(6, 182, 212, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  animation: card-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Línea de brillo superior */
+.modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.7),
+    rgba(6, 182, 212, 0.5),
+    transparent
+  );
+}
+
+/* Orb de luz ambient en la esquina */
+.modal-card::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.18), transparent 70%);
+  pointer-events: none;
 }
 
 @keyframes card-in {
-  from { opacity: 0; transform: translateY(30px) scale(0.94); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(28px) scale(0.93); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
-/* Ícono */
+/* ── Ícono de reloj / alerta ─────────────────────────── */
 .modal-icon {
-  width: 68px;
-  height: 68px;
-  background: rgba(248, 113, 113, 0.12);
-  border: 1px solid rgba(248, 113, 113, 0.3);
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f87171;
-  animation: pulse-warning 2.5s ease-in-out infinite;
+  position: relative;
+  /* Fondo glass con tono violeta */
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #a78bfa;
+  animation: icon-pulse 2.8s ease-in-out infinite;
 }
 
 .modal-icon svg {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.7));
 }
 
-@keyframes pulse-warning {
-  0%, 100% { box-shadow: 0 0 20px rgba(248, 113, 113, 0.2); }
-  50%       { box-shadow: 0 0 40px rgba(248, 113, 113, 0.45); }
+@keyframes icon-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(124, 58, 237, 0.25),
+      0 0 40px rgba(124, 58, 237, 0.10);
+  }
+  50% {
+    box-shadow:
+      0 0 35px rgba(124, 58, 237, 0.50),
+      0 0 70px rgba(124, 58, 237, 0.20),
+      0 0 100px rgba(6, 182, 212, 0.08);
+  }
 }
 
-/* Título */
+/* ── Título ──────────────────────────────────────────── */
 .modal-title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #f1f5f9;
+  font-size: 1.4rem;
+  font-weight: 800;
   margin: 0;
   letter-spacing: -0.02em;
+  /* Gradiente texto neon */
+  background: linear-gradient(135deg, #f1f5f9 30%, #a78bfa 80%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Mensaje */
+/* ── Separador neon ──────────────────────────────────── */
+.modal-divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, #7c3aed, #06b6d4);
+  border-radius: 999px;
+  opacity: 0.7;
+  margin: -0.25rem 0;
+}
+
+/* ── Mensaje ─────────────────────────────────────────── */
 .modal-message {
   font-size: 0.9375rem;
   color: #94a3b8;
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.65;
+  max-width: 300px;
 }
 
-/* Botón */
+/* ── Botón aceptar ───────────────────────────────────── */
 .modal-btn {
   width: 100%;
-  padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, #f87171, #ef4444);
-  color: white;
+  padding: 0.9rem 1.5rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: inherit;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 18px rgba(248, 113, 113, 0.4);
-  letter-spacing: 0.01em;
+
+  /* Gradiente neon purple → cyan */
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 50%, #0891b2 100%);
+  color: white;
+  box-shadow:
+    0 4px 20px rgba(124, 58, 237, 0.45),
+    0 0 40px rgba(124, 58, 237, 0.15);
+}
+
+/* Shimmer overlay en hover */
+.modal-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 .modal-btn:hover {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  box-shadow: 0 6px 28px rgba(248, 113, 113, 0.55);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 50%, #0e7490 100%);
+  box-shadow:
+    0 6px 30px rgba(124, 58, 237, 0.60),
+    0 0 60px rgba(124, 58, 237, 0.25);
+  transform: translateY(-2px);
 }
+
+.modal-btn:hover::after { opacity: 1; }
 
 .modal-btn:active {
   transform: translateY(0);
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.4);
 }
