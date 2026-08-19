@@ -9,11 +9,12 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./session-expired-modal.component.css'],
 })
 export class SessionExpiredModalComponent {
-  private readonly router     = inject(Router);
+  private readonly router      = inject(Router);
   private readonly authService = inject(AuthService);
 
   onAccept(): void {
     this.authService.clearSessionExpired();
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

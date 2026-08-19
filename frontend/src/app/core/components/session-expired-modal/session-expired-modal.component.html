@@ -1,5 +1,5 @@
-<div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <div class="modal-card">
+<div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" (click)="onAccept()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
 
     <!-- Ícono de reloj animado (expiración de tiempo) -->
     <div class="modal-icon" aria-hidden="true">
